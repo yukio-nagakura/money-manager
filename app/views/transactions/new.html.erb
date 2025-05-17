@@ -1,0 +1,37 @@
+<h1>取引の登録</h1>
+
+<%= form_with model: @transaction, local: true do |f| %>
+    <div>
+        <%= f.label :date, "日付：" %><br>
+        <%= f.date_field :date, value: Date.today %>
+    </div>
+
+    <div>
+        <%= f.label :transaction_type, "取引タイプ：" %><br>
+        <%= f.radio_button :transaction_type, "income" %> 収入
+        <%= f.radio_button :transaction_type, "expense" %> 支出
+    </div>
+
+    <div>
+        <%= f.label :category_id, "カテゴリ："%><br>
+        <%= f.select :category_id, Category.all.collect { |c| [c.name, c.id]}, prompt: "--カテゴリを選択--" %>
+    </div>
+
+    <div>
+        <%= f.label :amount, "金額：" %><br>
+        <%= f.number_field :amount, step: 100 %>
+    </div>
+
+    <div>
+        <%= f.label :note, "メモ：" %><br>
+        <%= f.text_field :note %>
+    </div>
+
+    <div>
+        <%= f.submit "登録する" %>   
+    </div>
+ <% ene %>
+ 
+ <% if notice %>
+    <p style="coior: green;"><%= notice %></p>
+ <% end %>

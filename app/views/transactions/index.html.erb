@@ -1,0 +1,27 @@
+<h1>取引一覧</h1>
+
+<table border="1" cellpadding="8">
+
+	<thead>
+		<tr>
+			<th>日付</th>
+			<th>種別</th>
+			<th>カテゴリ</th>
+			<th>金額</th>
+			<th>メモ</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @transactions.each do |t| %>
+			<tr>
+				<td><%= t.date %></td>
+				<td><%= t.transaction_type == "income" ? "収入" : "支出" %></td>
+				<td><%= t.category&.name %></td>
+				<td><%= number_to_currency(t.amount, unit: "¥", precision: 0) %></td>
+				<td><%= t.note %></td>
+			</tr>	
+		<% end %>		
+	</tbody>	
+</table>
+
+<p><%= link_to "新規取引を追加", new_transaction_path %></p>

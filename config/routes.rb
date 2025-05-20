@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :transactions, only: [:new, :create]
+  resources :transactions, only: [:index, :new, :create]
   resources :categories, only: [:index, :create]
-  root to: "transactions#new" #アプリのトップページをフォームにする
+  root to: "transactions#index" #アプリのトップページをフォームにする
 end

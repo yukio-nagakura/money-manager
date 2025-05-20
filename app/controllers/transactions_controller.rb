@@ -1,4 +1,8 @@
 class TransactionsController < ApplicationController
+  def index
+    @transactions = Transaction.includes(:category).order(date: :asc)
+  end
+
   def new
     @transaction = Transaction.new
   end
@@ -6,8 +10,9 @@ class TransactionsController < ApplicationController
   def create
     @transaction = Transaction.new(transaction_params)
     if @transaction.save
-      redirect_to new_transaction_path, notice: "登録しました"
+      redirect_to new_transaction_path, notice: "取引を登録しました"
     else
+      flash.now[:alert] = "登録に失敗しました"
       render :new
     end    
   end

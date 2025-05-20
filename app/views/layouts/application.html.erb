@@ -1,28 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Money Manager App" %></title>
+    <title>MoneyManageerApp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= yield :head %>
-
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   </head>
 
-  <body>
-    <%= yield %>
+  <body style="margin: 0; font-family: sans-serif;">
+    <div style="display; fiex; height 100vh;">
+      <!-- 左ペイン -->
+      <div style="width: 200px; background: #f0f0f0">
+        <h3>メニュー</h3>
+        <ul style="list-style: none; padding: 0;">
+          <li><%= link_to "トップ（取引一覧）", transactions_path %></li>
+          <li><%= link_to "取引を追加", new_transaction_path %></li>
+          <li><%= link_to "カテゴリ追加", categories_path %></li>
+        </ul>
+      </div>
+
+      <!-- メイン画面 -->
+      <div style="flex-grow: 1; padding: 20px;">
+        <% if notice %>
+          <p style="color :green;"><%= notice %></p>
+        <% end %>
+
+        <% if alert %>
+          <p style="color: red;"><%= alert %></p>
+        <% end %>
+
+        <%= yield %>
+      </div>
+      
+    </div>  
   </body>
 </html>

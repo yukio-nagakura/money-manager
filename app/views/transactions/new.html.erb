@@ -5,33 +5,35 @@
         <%= f.label :date, "日付：" %><br>
         <%= f.date_field :date, value: Date.today %>
     </div>
-
+    <br>
     <div>
         <%= f.label :transaction_type, "取引タイプ：" %><br>
         <%= f.radio_button :transaction_type, "income" %> 収入
         <%= f.radio_button :transaction_type, "expense" %> 支出
     </div>
-
+    <br>
     <div>
         <%= f.label :category_id, "カテゴリ："%><br>
         <%= f.select :category_id, Category.all.collect { |c| [c.name, c.id]}, prompt: "--カテゴリを選択--" %>
     </div>
-
+    <br>
     <div>
         <%= f.label :amount, "金額：" %><br>
-        <%= f.number_field :amount, step: 100 %>
+        <%= f.number_field :amount, step: 1 %>
     </div>
-
+    <br>
     <div>
         <%= f.label :note, "メモ：" %><br>
         <%= f.text_field :note %>
     </div>
-
+    <br>
     <div>
         <%= f.submit "登録する" %>   
     </div>
- <% ene %>
+ <% end %>
  
+ <p><%= link_to "一覧に戻る", transactions_path %></p>
+
  <% if notice %>
     <p style="coior: green;"><%= notice %></p>
  <% end %>

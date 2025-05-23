@@ -71,3 +71,7 @@ end
 
 
 gem 'ancestry'
+
+platforms :x86_64_linux do
+  gem "pg", "~> 1.5"
+end

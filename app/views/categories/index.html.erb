@@ -1,39 +1,81 @@
 <h2>カテゴリ一覧</h2>
 
-<%= render_arranged_categories(@categories) %>
+<h3>収入カテゴリ</h3>
+<ul>
+  <% Category.roots.where(transaction_type: "income").each do |parent| %>
+    <%= render_category_tree(parent) %>
+  <% end %>    
+</ul>
+
+<h3>支出カテゴリ</h3>
+<ul>
+  <% Category.roots.where(transaction_type: "expense").each do |parent| %>
+    <%= render_category_tree(parent) %>
+  <% end %>  
+</ul> 
 
 <hr>
 
 <h2>カテゴリ追加</h2>
 
-<%= form_with model: @category, url: categories_path, local: true, data: { turbo: false } do |f| %>
+<%= form_with model: @category, url: categories_path, local: true do |f| %>
+
+  <div>
+    <%= f.label :transaction_type, "種別(収入 or 支出)" %><br>
+    <%= f.select :transaction_type,
+             [["収入", "income"], ["支出", "expense"]],
+             { prompt: "-- 種別を選択 --" },
+             { id: "transaction_type_select" } %>
+  </div>
+
+  <br>
+
+  <div>
+    <%= f.label :ancestry, "親カテゴリ(任意)" %><br>
+    <select name="category[ancestry]" id="parent_category_select">
+      <option value="">-- 親カテゴリを選択 --</option>
+      <% Category.all.each do |c| %>
+        <option value="<%= c.id %>" data-transaction-type="<%= c.transaction_type %>">
+          <%= c.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <br>
 
   <div>
     <%= f.label :name, "カテゴリ名" %><br>
     <%= f.text_field :name %>
   </div>
+
   <br>
-  <div>
-    <%= f.label :ancestry, "親カテゴリ(任意)" %><br>
-    <%= f.select :ancestry, Category.all.collect { |c| [c.name, c.id] }, prompt: "-- 親カテゴリーを選択 --" %>
-  </div>
-  <br>
+
   <div>
     <%= f.submit "追加する" %>
   </div>
 <% end %>
 
-<% if @category.errors.any? %>
-  <div style="color: red;">
-    <h3>エラーがあります：</h3>
-    <ul>
-      <% @category.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>  
-    </ul>  
-  </div>
-<% end %>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const typeSelect = document.getElementById("transaction_type_select");
+    const parentSelect = document.getElementById("parent_category_select");
 
-<% if notice %>
-  <p style="color: green;"><%= notice %></p>
-<% end %>
+    // 最初にある全カテゴリを保存しておく
+    const allOptions = Array.from(parentSelect.options).slice(1);
+
+    typeSelect.addEventListener("change", function () {
+      const selectedType = this.value;
+
+      // リセット
+      parentSelect.innerHTML = '<option value="">-- 親カテゴリを選択 --</option>';
+
+      // 🔴 修正ここ！ dataset.transactionType に変更！
+      const filtered = allOptions.filter(opt => opt.dataset.transactionType === selectedType);
+
+      filtered.forEach(opt => {
+        parentSelect.appendChild(opt.cloneNode(true));
+      });
+    });
+  });
+</script>

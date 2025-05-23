@@ -1,4 +1,7 @@
 class Category < ApplicationRecord
-    has_ancestry
-    validates :name, presence: true #name必須の設定
+  # 子や孫も一緒に削除される設定
+  has_ancestry orphan_strategy: :destroy
+
+  # バリデーション：名前必須
+  validates :name, presence: true
 end

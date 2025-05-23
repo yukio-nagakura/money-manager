@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_13_183113) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_21_211604) do
   create_table "categories", force: :cascade do |t|
     t.string "name"
     t.string "ancestry"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "transaction_type"
   end
 
   create_table "transactions", force: :cascade do |t|

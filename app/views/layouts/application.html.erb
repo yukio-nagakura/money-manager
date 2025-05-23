@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>MoneyManageerApp</title>
+    <title>MoneyManagerApp</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_importmap_tags %>
+
   </head>
 
   <body style="margin: 0; font-family: sans-serif;">
-    <div style="display; fiex; height 100vh;">
-      <!-- 左ペイン -->
-      <div style="width: 200px; background: #f0f0f0">
-        <h3>メニュー</h3>
-        <ul style="list-style: none; padding: 0;">
-          <li><%= link_to "トップ（取引一覧）", transactions_path %></li>
-          <li><%= link_to "取引を追加", new_transaction_path %></li>
-          <li><%= link_to "カテゴリ追加", categories_path %></li>
-        </ul>
+
+    <!-- 🟨 上部タイトル -->
+    <div style="font-size: 3em; font-weight: bold; color: white; background: #FBE1E2; text-align: center; padding: 20px; border-bottom: 5px solid #ccc;">
+      金銭管理
+    </div>
+
+    <!-- 🧱 画面本体：左ペイン＋メイン -->
+    <div style="display: flex; height: calc(100vh - 100px);">
+      
+      <!-- 📋 左ペイン -->
+      <div style="width: 25%; background: #EAF6FB; padding: 20px; box-sizing: border-box;">
+        <nav>
+          <ul style="list-style: none; padding: 0; line-height: 2em;">
+            <li><%= link_to "📂 カテゴリ管理", categories_path, style: "color: #5d5d5d; font-weight: bold;" %></li>
+            <li><%= link_to "➕ 取引を追加", new_transaction_path, style: "color: #5d5d5d; font-weight: bold;" %></li>
+            <li><%= link_to "🏠 取引一覧", transactions_path, style: "color: #5d5d5d; font-weight: bold;" %></li>
+          </ul>
+        </nav>
       </div>
 
-      <!-- メイン画面 -->
+      <!-- 📄 メイン画面 -->
       <div style="flex-grow: 1; padding: 20px;">
-        <% if notice %>
-          <p style="color :green;"><%= notice %></p>
-        <% end %>
-
-        <% if alert %>
-          <p style="color: red;"><%= alert %></p>
-        <% end %>
-
         <%= yield %>
       </div>
-      
-    </div>  
+    </div>
+    
   </body>
 </html>

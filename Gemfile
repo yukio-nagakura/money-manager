@@ -65,11 +65,6 @@ group :test do
   gem "selenium-webdriver"
 end
 
-group :production do
-  gem "pg", "~> 1.5"
-end
-
-
 gem 'ancestry'
 
 platforms :x86_64_linux do

@@ -11,7 +11,7 @@ gem "pg", "~> 1.5"
 gem "ancestry"
 
 group :development, :test do
-  gem "debug", platforms: %i[mri windows], require: "debug/prelude"
+  gem "debug", platforms: %i[mri windows]
   gem "brakeman", require: false
   gem "rubocop-rails-omakase", require: false
   gem "web-console"

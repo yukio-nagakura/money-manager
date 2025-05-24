@@ -2,7 +2,22 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: 5
+  
+development:
+  <<: *default
+  database: mm_development
+  username: nagakura_yukio
+  password:
+
+test:
+  <<: *default
+  database: mm_test
+  username: nagakura_yukio
+  password:
 
 production:
   <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  database: mm_production
+  username: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
+  host: <%= ENV["DB_HOST"] %>

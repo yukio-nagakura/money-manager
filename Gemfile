@@ -7,7 +7,7 @@ gem "importmap-rails"
 gem "turbo-rails"
 gem "stimulus-rails"
 gem "jbuilder"
-gem "pg", "~> 1.5"
+gem "pg", "~> 1.5", platforms: [:ruby]
 gem "ancestry"
 
 group :development, :test do

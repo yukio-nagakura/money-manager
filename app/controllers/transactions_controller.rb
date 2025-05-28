@@ -9,9 +9,12 @@ class TransactionsController < ApplicationController
 
   def create
     @transaction = Transaction.new(transaction_params)
+    Rails.logger.info "Savem前: #{@transaction.inspect}"
     if @transaction.save
+      Rails.logger.info "Save:True #{@transaction.inspect}"
       redirect_to new_transaction_path, notice: "取引を登録しました"
     else
+      Rails.logger.warn "Save:False #{@transaction.errors.full_messages}"
       flash.now[:alert] = "登録に失敗しました"
       render :new
     end    

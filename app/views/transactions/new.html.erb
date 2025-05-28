@@ -1,39 +1,98 @@
 <h1>取引の登録</h1>
 
 <%= form_with model: @transaction, local: true do |f| %>
-    <div>
-        <%= f.label :date, "日付：" %><br>
-        <%= f.date_field :date, value: Date.today %>
-    </div>
-    <br>
-    <div>
-        <%= f.label :transaction_type, "取引タイプ：" %><br>
-        <%= f.radio_button :transaction_type, "income" %> 収入
-        <%= f.radio_button :transaction_type, "expense" %> 支出
-    </div>
-    <br>
-    <div>
-        <%= f.label :category_id, "カテゴリ："%><br>
-        <%= f.select :category_id, Category.all.collect { |c| [c.name, c.id]}, prompt: "--カテゴリを選択--" %>
-    </div>
-    <br>
-    <div>
-        <%= f.label :amount, "金額：" %><br>
-        <%= f.number_field :amount, step: 1 %>
-    </div>
-    <br>
-    <div>
-        <%= f.label :note, "メモ：" %><br>
-        <%= f.text_field :note %>
-    </div>
-    <br>
-    <div>
-        <%= f.submit "登録する" %>   
-    </div>
- <% end %>
- 
- <p><%= link_to "一覧に戻る", transactions_path %></p>
 
- <% if notice %>
-    <p style="coior: green;"><%= notice %></p>
- <% end %>
+  <div>
+    <%= f.label :date, "日付：" %><br>
+    <%= f.date_field :date, value: Date.today %>
+  </div>
+  <br>
+  <div>
+    <%= f.label :transaction_type, "取引タイプ：" %><br>
+    <%= f.radio_button :transaction_type, "income", id: "radio_income" %>
+    <%= f.label :transaction_type_income, "収入" %>
+    <%= f.radio_button :transaction_type, "expense", id: "radio_expense" %>
+    <%= f.label :transaction_type_expense, "支出" %>
+  </div>
+	<div>
+		<%= f.label :category_id, "カテゴリ：" %><br>
+		<select id="category_select" name="transaction[category_id]">
+			<option value="">-- カテゴリを選択 --</option>
+			<% Category.all.each do |c| %>
+				<option value="<%= c.id %>" data-type="<%= c.transaction_type %>"
+					<%= "selected" if @transaction.category_id.to_s == c.id.to_s %>>
+					<%= c.name %>
+				</option>
+			<% end %>
+		</select>
+		<% if @transaction.errors[:category_id].any? %>
+			<div style="color: red;"><%= @transaction.errors[:category_id].first %></div>
+		<% end %>
+	</div>
+  <br>
+  <div>
+    <%= f.label :amount, "金額：" %><br>
+    <%= f.number_field :amount, step: 1 %>
+  </div>
+  <br>
+  <div>
+    <%= f.label :note, "メモ：" %><br>
+    <%= f.text_field :note %>
+  </div>
+  <br>
+  <div>
+    <%= f.submit "登録する" %>
+  </div>
+	
+	<% if f.object.errors.any? %>
+		<div style="color: red;">
+			<h2>エラーがあります：</h2>
+			<ul>
+				<% f.object.errors.full_messages.each do |msg| %>
+					<li><%= msg %></li>
+				<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+<% end %>
+
+<p><%= link_to "一覧に戻る", transactions_path %></p>
+
+<% if notice %>
+	<p style="coior: green;"><%= notice %></p>
+<% end %>
+
+
+
+<script>
+  document.addEventListener("turbo:load", function () {
+		const incomeRadio = document.getElementById("radio_income");
+		const expenseRadio = document.getElementById("radio_expense");
+		const categorySelect = document.getElementById("category_select");
+
+		if (!incomeRadio || !expenseRadio || !categorySelect) {
+			console.warn("フォーム要素が見つかりません。IDが正しいか確認してね");
+			return;
+		}
+
+		const allOptions = Array.from(categorySelect.querySelectorAll("option")).slice(1); // 最初の "--選択--" を除外
+
+		function filterCategories(type) {
+			categorySelect.innerHTML = '<option value="">--カテゴリを選択--</option>';
+			allOptions
+				.filter(opt => opt.dataset.type === type)
+				.forEach(opt => categorySelect.appendChild(opt.cloneNode(true)));
+		}
+
+		// 🔁 まずイベント登録
+		incomeRadio.addEventListener("change", () => filterCategories("income"));
+		expenseRadio.addEventListener("change", () => filterCategories("expense"));
+
+		// ✅ 最後に一度フィルターを呼ぶ（HTMLが完全に読み込まれてから）
+		setTimeout(() => {
+			incomeRadio.checked = true;
+			filterCategories("income");
+		}, 0);
+	});
+</script>
